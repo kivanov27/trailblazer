@@ -1,0 +1,1 @@
+- fix task completion to increment the streak
