@@ -1,12 +1,14 @@
 import { useState } from "react";
-import type { Difficulty } from "../types";
+import type { Difficulty, Task } from "../types";
 
 interface TaskFormProps {
     formOpen: boolean;
     setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    tasks: Task[];
+    setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const TaskForm = ({ formOpen, setFormOpen }: TaskFormProps) => {
+const TaskForm = ({ formOpen, setFormOpen, tasks, setTasks }: TaskFormProps) => {
     const [name, setName] = useState<string>("");
     const [difficulty, setDifficulty] = useState<Difficulty>("Easy");
     const [days, setDays] = useState<string[]>([]);
@@ -23,7 +25,12 @@ const TaskForm = ({ formOpen, setFormOpen }: TaskFormProps) => {
         }
     };
 
-    const addTask = () => {
+    const addTask = (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        if (name === "") return;
+
+        const newTask: Task = { name, streak: 0, days, completed: false, difficulty };
+        setTasks([...tasks, newTask]);
         setFormOpen(false);
     };
 
@@ -36,7 +43,7 @@ const TaskForm = ({ formOpen, setFormOpen }: TaskFormProps) => {
                 className="task-form-container"
                 onClick={(e) => e.stopPropagation()}
             >
-                <form className="task-form">
+                <form onSubmit={addTask} className="task-form">
                     <h2 className="task-form-title">Task Form</h2>
                     <div className="task-form-group">
                         <label htmlFor="name">Name:</label>
@@ -48,7 +55,7 @@ const TaskForm = ({ formOpen, setFormOpen }: TaskFormProps) => {
                     </div>
                     <div className="task-form-group">
                         <label htmlFor="difficulty">Difficulty:</label>
-                        <select id="difficulty">
+                        <select id="difficulty" onChange={({ target }) => setDifficulty(target.value as Difficulty)}>
                             <option value="Easy">Easy</option>
                             <option value="Medium">Medium</option>
                             <option value="Hard">Hard</option>
@@ -80,7 +87,7 @@ const TaskForm = ({ formOpen, setFormOpen }: TaskFormProps) => {
                             </button>
                         </div>
                     </div>
-                    <button onClick={addTask} className="task-form-button">Add</button>
+                    <button type="submit" className="task-form-button">Add</button>
                 </form>
             </div>
         </div>

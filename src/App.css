@@ -29,6 +29,13 @@
     column-gap: 15px;
 }
 
+.streak {
+    text-align: center;
+}
+.streak-number {
+    font-weight: 600;
+}
+
 .checkbox {
     width: 25px;
     height: 25px;

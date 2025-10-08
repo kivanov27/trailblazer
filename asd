@@ -1,3 +1,0 @@
-- create github repo
-- make it so selecting difficulty changes the state
-- make the add button add a task to the state

@@ -8,13 +8,23 @@ interface TaskProps {
 const Task = (props: TaskProps) => {
     const [task, setTask] = useState<TaskType>(props.task);
 
+    const completeTask = () => {
+        if (!task.completed) {
+            setTask({ ...task, streak: task.streak + 1, completed: true});
+        }
+        else {
+            setTask({ ...task, streak: task.streak - 1, completed: false});
+        }
+    };
+
     return (
         <div className="task-container">
             <div 
                 className={`checkbox ${task.completed ? "checked" : ""}`}
-                onClick={() => setTask({ ...task, completed: !task.completed })}
+                onClick={completeTask}
             />
-            <span className={`${task.completed ? "completed" : ""}`}>{task.name}</span>
+            <span className={`${task.completed ? "completed" : ""}`}
+            >{task.name}</span>
         </div>
     );
 };
