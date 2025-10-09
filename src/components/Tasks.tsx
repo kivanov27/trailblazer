@@ -20,7 +20,10 @@ const Tasks = () => {
             const today = new Date().toLocaleDateString("en-GB", { weekday: "long" });
             if (today !== weekday) {
                 setWeekday(today);
-                setTasks(tasks.map(t => ({ ...t, completed: false })));
+                setTasks(tasks.map(t => t.streak > 0 && t.completed === false ?
+                    { ...t, streak: 0, completed: false } :
+                    { ...t, completed: false }
+                ));
             }
         }
         const interval = setInterval(checkDayChange, 1000 * 60 * 60);
