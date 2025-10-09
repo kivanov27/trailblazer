@@ -1,27 +1,16 @@
-import { useState } from "react";
 import type { Task as TaskType } from "../types";
 
 interface TaskProps {
     task: TaskType;
+    completeTask: (task: TaskType) => void;
 };
 
-const Task = (props: TaskProps) => {
-    const [task, setTask] = useState<TaskType>(props.task);
-
-    const completeTask = () => {
-        if (!task.completed) {
-            setTask({ ...task, streak: task.streak + 1, completed: true});
-        }
-        else {
-            setTask({ ...task, streak: task.streak - 1, completed: false});
-        }
-    };
-
+const Task = ({ task, completeTask }: TaskProps) => {
     return (
         <div className="task-container">
             <div 
                 className={`checkbox ${task.completed ? "checked" : ""}`}
-                onClick={completeTask}
+                onClick={() => completeTask(task)}
             />
             <span className={`${task.completed ? "completed" : ""}`}
             >{task.name}</span>

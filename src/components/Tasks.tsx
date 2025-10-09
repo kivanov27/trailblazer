@@ -1,11 +1,11 @@
 import Task from "./Task";
-import type { Task as TaskType, Difficulty } from "../types";
+import type { Task as TaskType, Difficulty, NewTask } from "../types";
 import { useState } from "react";
 import TaskForm from "./TaskForm";
 
 const initialTasks = [
-    { name: "Meditation", streak: 3, days: ["Monday", "Tuesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty },
-    { name: "Exercise", streak: 6, days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty }
+    { id: "1", name: "Meditation", streak: 3, days: ["Monday", "Tuesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty },
+    { id: "2", name: "Exercise", streak: 6, days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty }
 ];
 
 const Tasks = () => {
@@ -13,18 +13,39 @@ const Tasks = () => {
     const [formOpen, setFormOpen] = useState<boolean>(false);
     const weekday = new Date().toLocaleDateString("en-GB", { weekday: "long" });
 
+    const addTask = (newTask: NewTask) => {
+        const task = { id: (tasks.length + 2).toString(), ...newTask };
+        setTasks(tasks.concat(task));
+    };
+
+    const completeTask = (task: TaskType) => {
+        const checked = task.completed;
+        if (!checked) {
+            setTasks(
+                tasks.map(t => t.id === task.id ? 
+                    { ...t, completed: !t.completed, streak: t.streak + 1 } : t)
+            );
+        }
+        else {
+            setTasks(
+                tasks.map(t => t.id === task.id ? 
+                    { ...t, completed: !t.completed, streak: t.streak - 1 } : t)
+            );
+        }
+    };
+
     return (
         <div className="tasks-container">
             {tasks.map(task =>
                 task.days.length !== 0 &&
-                <p key={task.name} className="streak">{task.name} streak:
+                <p key={task.id} className="streak">{task.name} streak:
                     <span className="streak-number"> {task.streak}</span>
                 </p>
 
             )}
             {tasks.map(task =>
                 task.days.includes(weekday) &&
-                <Task task={task} key={task.name} />
+                <Task key={task.id} task={task} completeTask={completeTask} />
             )}
             <button 
                 className="button-addTask"
@@ -33,8 +54,7 @@ const Tasks = () => {
             <TaskForm 
                 formOpen={formOpen} 
                 setFormOpen={setFormOpen} 
-                tasks={tasks} 
-                setTasks={setTasks} 
+                addTask={addTask}
             />
         </div>
     );

@@ -1,14 +1,13 @@
 import { useState } from "react";
-import type { Difficulty, Task } from "../types";
+import type { Difficulty, NewTask } from "../types";
 
 interface TaskFormProps {
     formOpen: boolean;
     setFormOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    tasks: Task[];
-    setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+    addTask: (task: NewTask) => void;
 }
 
-const TaskForm = ({ formOpen, setFormOpen, tasks, setTasks }: TaskFormProps) => {
+const TaskForm = ({ formOpen, setFormOpen, addTask }: TaskFormProps) => {
     const [name, setName] = useState<string>("");
     const [difficulty, setDifficulty] = useState<Difficulty>("Easy");
     const [days, setDays] = useState<string[]>([]);
@@ -25,12 +24,12 @@ const TaskForm = ({ formOpen, setFormOpen, tasks, setTasks }: TaskFormProps) => 
         }
     };
 
-    const addTask = (e: React.SyntheticEvent) => {
+    const createTask = (e: React.SyntheticEvent) => {
         e.preventDefault();
         if (name === "") return;
 
-        const newTask: Task = { name, streak: 0, days, completed: false, difficulty };
-        setTasks([...tasks, newTask]);
+        const newTask: NewTask = { name, streak: 0, days, completed: false, difficulty };
+        addTask(newTask);
         setFormOpen(false);
     };
 
@@ -43,7 +42,7 @@ const TaskForm = ({ formOpen, setFormOpen, tasks, setTasks }: TaskFormProps) => 
                 className="task-form-container"
                 onClick={(e) => e.stopPropagation()}
             >
-                <form onSubmit={addTask} className="task-form">
+                <form onSubmit={createTask} className="task-form">
                     <h2 className="task-form-title">Task Form</h2>
                     <div className="task-form-group">
                         <label htmlFor="name">Name:</label>

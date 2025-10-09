@@ -1,1 +1,2 @@
+- pass addTask to TaskForm instead of adding it in the component
 - fix task completion to increment the streak
