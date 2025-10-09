@@ -1,6 +1,6 @@
 import Task from "./Task";
 import type { Task as TaskType, Difficulty, NewTask } from "../types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskForm from "./TaskForm";
 
 const initialTasks = [
@@ -11,7 +11,21 @@ const initialTasks = [
 const Tasks = () => {
     const [tasks, setTasks] = useState<TaskType[]>(initialTasks);
     const [formOpen, setFormOpen] = useState<boolean>(false);
-    const weekday = new Date().toLocaleDateString("en-GB", { weekday: "long" });
+    const [weekday, setWeekday] = useState<string>(
+        new Date().toLocaleDateString("en-GB", { weekday: "long" })
+    );
+
+    useEffect(() => {
+        const checkDayChange = () => {
+            const today = new Date().toLocaleDateString("en-GB", { weekday: "long" });
+            if (today !== weekday) {
+                setWeekday(today);
+                setTasks(tasks.map(t => ({ ...t, completed: false })));
+            }
+        }
+        const interval = setInterval(checkDayChange, 1000 * 60 * 60);
+        return () => clearInterval(interval);
+    }, [tasks, weekday]);
 
     const addTask = (newTask: NewTask) => {
         const task = { id: (tasks.length + 2).toString(), ...newTask };
