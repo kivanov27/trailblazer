@@ -1,2 +1,1 @@
-- think of a way to reset task completion
-- introduce streak breaker
+- add db integration

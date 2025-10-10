@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import TaskForm from "./TaskForm";
 
 const initialTasks = [
-    { id: "1", name: "Meditation", streak: 3, days: ["Monday", "Tuesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty },
-    { id: "2", name: "Exercise", streak: 6, days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty }
+    { id: 1, name: "Meditation", streak: 3, days: ["Monday", "Tuesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty },
+    { id: 2, name: "Exercise", streak: 6, days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], completed: false, difficulty: "Hard" as Difficulty }
 ];
 
 const Tasks = () => {
@@ -31,7 +31,7 @@ const Tasks = () => {
     }, [tasks, weekday]);
 
     const addTask = (newTask: NewTask) => {
-        const task = { id: (tasks.length + 2).toString(), ...newTask };
+        const task = { id: tasks.length + 2, ...newTask };
         setTasks(tasks.concat(task));
     };
 
